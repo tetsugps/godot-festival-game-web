@@ -8,6 +8,7 @@
 - ジャンプ: Space / Z
 - 斬撃: X / J
 - 休憩 / 再開: Esc
+- タブレット: 横向きで開き、画面に触れると表示される左右・ジャンプ・斬撃パッドで操作
 
 ブラウザ版: https://tetsugps.github.io/godot-festival-game-web/
 
