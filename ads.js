@@ -1,5 +1,5 @@
-/* Configure the publisher ID only after the H5 Games Ads application is approved. */
-window.FESTIVAL_ADS_PUBLISHER_ID = "";
+/* AdSense publisher ID; keep test mode enabled until H5 Games Ads is approved. */
+window.FESTIVAL_ADS_PUBLISHER_ID = "ca-pub-8805410383938800";
 window.FESTIVAL_ADS_TEST_MODE = true;
 window.festivalAdsReady = false;
 
