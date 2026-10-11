@@ -8,6 +8,9 @@ window.requestFestivalAd = function (type, name) {
 	window.adBreak({
 		type: type,
 		name: name,
+		beforeAd: function () {
+			if (typeof window.godotAdBreakStarted === "function") window.godotAdBreakStarted();
+		},
 		adBreakDone: function () {
 			if (typeof window.godotAdBreakDone === "function") window.godotAdBreakDone();
 		}
@@ -19,6 +22,12 @@ window.requestFestivalAd = function (type, name) {
 	const publisherId = window.FESTIVAL_ADS_PUBLISHER_ID;
 	if (!publisherId) return;
 
+	// Queue calls until adsbygoogle.js is ready, as required by the Ad Placement API.
+	window.adsbygoogle = window.adsbygoogle || [];
+	window.adBreak = window.adConfig = function (options) {
+		window.adsbygoogle.push(options);
+	};
+
 	const script = document.createElement("script");
 	script.async = true;
 	script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=" + encodeURIComponent(publisherId);
@@ -27,7 +36,7 @@ window.requestFestivalAd = function (type, name) {
 	if (window.FESTIVAL_ADS_TEST_MODE) script.dataset.adbreakTest = "on";
 	script.onload = function () {
 		if (typeof window.adConfig !== "function" || typeof window.adBreak !== "function") return;
-		window.adConfig({ preloadAdBreaks: "auto", sound: "on" });
+		window.adConfig({ preloadAdBreaks: "on", sound: "on" });
 		window.festivalAdsReady = true;
 	};
 	document.head.appendChild(script);
