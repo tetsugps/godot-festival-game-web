@@ -17,8 +17,31 @@
 		<canvas id="canvas" tabindex="0"></canvas>
 		<script src="index.js"></script>
 		<script>
-			const engine = new Engine({"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":43851732,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4});
-			engine.startGame({ "canvas": document.getElementById("canvas") });
+			const canvas = document.getElementById("canvas");
+			let landscapeRequestPending = false;
+
+			async function requestLandscapeForGame(event) {
+				if (event.pointerType !== "touch" || window.innerHeight <= window.innerWidth || landscapeRequestPending) {
+					return;
+				}
+				landscapeRequestPending = true;
+				try {
+					if (!document.fullscreenElement && canvas.requestFullscreen) {
+						await canvas.requestFullscreen({ navigationUI: "hide" });
+					}
+					if (screen.orientation && screen.orientation.lock) {
+						await screen.orientation.lock("landscape");
+					}
+				} catch (_error) {
+					// Orientation locking is optional; unsupported browsers can still play normally.
+				} finally {
+					landscapeRequestPending = false;
+				}
+			}
+
+			canvas.addEventListener("pointerdown", requestLandscapeForGame, { capture: true });
+			const engine = new Engine({"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":43851796,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4});
+			engine.startGame({ "canvas": canvas });
 		</script>
 	</body>
 </html>
